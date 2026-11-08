@@ -35,6 +35,7 @@
     .investment-panel{padding:25px 27px 20px;margin-bottom:33px;background:radial-gradient(ellipse at 15% 40%,#54d9b00b,transparent 65%),#121922;border-color:#54d9b02b}.investment-panel .chart-tag{color:#9bd3bf;background:#54d9b00a;border-color:#54d9b026}.investment-summary{margin-top:24px}.investment-summary>span{font-size:11px;color:#a4b6b1}.investment-summary>strong{display:block;margin-top:7px;color:var(--investment);font-size:34px;letter-spacing:-.8px;font-weight:550;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}.investment-panel .mix-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:48px;margin:12px 0 16px;min-height:340px}.investment-panel .donut-wrap{width:min(100%,340px);height:auto;aspect-ratio:1;justify-self:center}.mix-breakdown{min-width:0;width:100%;max-width:520px}.mix-breakdown-heading{font-size:11px;color:#9aafa7;margin-bottom:16px}.investment-panel .mix-legend{width:100%;gap:10px}.investment-panel .legend-item{padding:16px;border:1px solid #54d9b01e;background:#54d9b005;border-radius:10px;gap:12px;font-size:13px}.investment-panel .legend-item:hover,.investment-panel .legend-item[aria-pressed=true],.investment-panel .legend-item.is-highlighted{background:#54d9b011;border-color:#54d9b060}.investment-panel .swatch{width:9px;height:9px}.legend-values{text-align:right;flex-shrink:0}.investment-panel .legend-values strong{display:block;font-size:16px;color:#d7e9e2;font-variant-numeric:tabular-nums}.legend-values small{display:block;font-size:11px;margin-top:5px;color:#8ba79b}.investment-panel .chart-note{font-size:10px;line-height:1.7;margin-top:12px}
     @media(max-width:800px){.investment-panel .mix-layout{gap:24px;min-height:280px}.investment-panel .donut-wrap{width:min(100%,280px)}.investment-panel .legend-item{padding:12px;gap:9px}.investment-panel .legend-values strong{font-size:14px}}
     @media(max-width:600px){.charts-grid{grid-template-columns:1fr}.investment-panel{padding:19px 15px;margin-bottom:27px}.investment-summary{margin-top:19px}.investment-summary>strong{font-size:28px}.investment-panel .mix-layout{grid-template-columns:1fr;gap:24px;margin-top:16px}.investment-panel .donut-wrap{width:min(100%,280px)}.mix-breakdown{max-width:none}.investment-panel .legend-item{font-size:12px;padding:14px}.investment-panel .chart-note{font-size:9px}}
+    .loan-start{display:flex;justify-content:space-between;gap:12px;margin-top:18px;font-size:10px;color:var(--muted)}.loan-start strong{font-weight:500;color:#b8c5d5}
   </style>
 </head>
 <body>
@@ -50,7 +51,7 @@
     </header>
     <section class="hero" aria-labelledby="page-title">
       <div><h1 id="page-title">I’ve got this.<br><span>The world is mine.</span></h1></div>
-      <div class="month-block"><div class="month-chip"><span data-icon="calendar"></span><span id="month">Monthly snapshot</span></div><div class="updated" id="updated">Loading data.json…</div></div>
+      <div class="month-block"><div class="month-chip"><span data-icon="calendar"></span><span id="month">Current month</span></div><div class="updated" id="updated">Loading data.json…</div></div>
     </section>
     <div id="error" class="notice error" role="alert" hidden></div>
     <div id="sample" class="notice" hidden><span data-icon="info"></span><span><strong>Sample numbers.</strong> Use Edit numbers to replace them, then turn off “These are sample numbers”.</span></div>
@@ -69,7 +70,7 @@
       </section>
       <section id="debts" class="category debt-tone" aria-labelledby="debts-title">
         <div class="section-head"><div><div class="section-title"><span class="section-icon" data-icon="debt"></span><h2 id="debts-title">Debts</h2><span class="pill" id="debt-pill"></span></div><p class="section-description">Calculated from your reducing-balance loan terms.</p></div><label><span class="sr-only">Sort debts</span><select id="debt-sort" class="sort"><option value="principal">Largest balance</option><option value="months">Ending soonest</option><option value="emi">Highest EMI</option><option value="lender">Lender A–Z</option></select></label></div>
-        <div id="debt-rows" class="entry-grid"></div><p class="section-note">Calculated estimates, not lender statements. Assumes a fixed annual rate, monthly payments on time, and no fees or prepayments. Card sliders preview principal and future interest; snapshot totals and JSON stay unchanged.</p>
+        <div id="debt-rows" class="entry-grid"></div><p class="section-note">Calculated estimates, not lender statements. Assumes a fixed annual rate, monthly payments on time, and no fees or prepayments. Card sliders preview principal and future interest; current totals and JSON stay unchanged. The current month’s EMI is included; earlier months are assumed paid.</p>
       </section>
       <section class="chart-panel repayment-panel reveal" aria-labelledby="repayment-title">
         <div class="repayment-heading"><div><h2 id="repayment-title">Remaining debt, including interest</h2><p>Watch principal and future interest fall with every payment.</p></div><span class="chart-tag">FIXED-RATE ESTIMATES</span></div>
@@ -88,14 +89,13 @@
         <div class="section-head"><div><div class="section-title"><span class="section-icon" data-icon="flag"></span><h2 id="plans-title">Plans</h2><span class="pill" id="plan-pill"></span></div><p class="section-description">Targets and amounts needed.</p></div><div class="section-total"><span>Total needed</span><strong id="plan-total"></strong></div></div><div id="plan-rows" class="entry-grid"></div><p class="section-note">Plan bars show each target’s share of the total budget, not savings progress.</p>
       </section>
     </div>
-    <footer class="footnote"><span id="source" class="data-name">data.json</span><span>Monthly snapshot</span></footer>
+    <footer class="footnote"><span id="source" class="data-name">data.json</span><span>Current month</span></footer>
     <div id="status" class="sr-only" role="status" aria-live="polite"></div>
   </main>
   <dialog id="editor" aria-labelledby="editor-title" aria-describedby="editor-description">
     <form id="editor-form">
-      <div class="editor-head"><h2 id="editor-title">Edit your monthly snapshot</h2><p id="editor-description">Update your numbers, then download data.json and replace it in GitHub. Changes here do not overwrite the published file. EMI and principal are calculated from the loan terms; update remaining months after payments.</p></div>
+      <div class="editor-head"><h2 id="editor-title">Edit your finances</h2><p id="editor-description">Update your numbers, then download data.json and replace it in GitHub. Changes here do not overwrite the published file. Enter the first EMI month for each loan. Remaining months and principal update automatically with the current calendar month.</p></div>
       <div class="editor-body">
-        <div class="editor-meta"><label class="editor-field">Month<input id="edit-month" type="month" required min="1000-01" max="9999-12"></label><label class="editor-field">Updated on<input id="edit-date" type="date" required min="1000-01-01" max="9999-12-31"></label></div>
         <label class="sample-toggle"><input id="edit-sample" type="checkbox">These are sample numbers</label>
         <fieldset class="edit-section"><legend>Debts</legend><div id="edit-debts"></div><button class="btn editor-add" type="button" data-add="debts">+ Add debt</button></fieldset>
         <fieldset class="edit-section"><legend>Investments</legend><div id="edit-investments"></div><button class="btn editor-add" type="button" data-add="investments">+ Add investment</button></fieldset>
@@ -134,12 +134,25 @@
     let loadSequence = 0;
     let editingDirty = false;
     const editorFields = {
-      debts: [['lender','Lender','text'],['originalAmount','Initial loan','amount'],['annualInterestRate','Annual rate (%)','rate'],['totalTenureMonths','Total tenure (months)','integer'],['monthsRemaining','Months remaining','integer']],
+      debts: [['lender','Lender','text'],['originalAmount','Initial loan','amount'],['annualInterestRate','Annual rate (%)','rate'],['totalTenureMonths','Total tenure (months)','integer'],['startMonth','First EMI month','month']],
       investments: [['name','Name','text'],['currentCapital','Current capital','amount']],
       plans: [['name','Plan','text'],['amountNeeded','Amount needed','amount']]
     };
 
     const editorSources = new WeakMap();
+    function currentMonth(date = new Date()) {
+      return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;
+    }
+    function validMonth(value) {
+      return typeof value === 'string' && /^[1-9]\d{3}-(0[1-9]|1[0-2])$/.test(value);
+    }
+    function monthNumber(value) {
+      const [year,month]=value.split('-').map(Number);
+      return year*12+month-1;
+    }
+    function formatMonth(value, short = false) {
+      return new Date(value+'-01T00:00:00Z').toLocaleDateString(data.locale,{month:short?'short':'long',year:'numeric',timeZone:'UTC'});
+    }
     // Fixed-rate monthly reducing balance. Keep full precision until display.
     function calculateEMI(loan) {
       const r = loan.annualInterestRate / 1200;
@@ -154,7 +167,8 @@
         : loan.emiAmount * -Math.expm1(-months * Math.log1p(r)) / r);
     }
     function exportSnapshot() {
-      return {...data, debts:data.debts.map(({emiAmount,principalRemaining,...inputs})=>inputs)};
+      const {month,updatedAt,...saved}=data;
+      return {...saved, debts:data.debts.map(({emiAmount,principalRemaining,monthsRemaining,...inputs})=>inputs)};
     }
     function editorRowValues(row) {
       return {...editorSources.get(row), ...Object.fromEntries([...row.querySelectorAll('input')].map(input=>[input.dataset.field,input.type === 'number' ? input.valueAsNumber : input.value]))};
@@ -162,9 +176,9 @@
     function updateLoanEstimate(el) {
       try {
         const loan = validate({...data, debts:[editorRowValues(el)]}).debts[0];
-        el.querySelector('.loan-estimate').textContent = `Calculated EMI ${money(loan.emiAmount)} · Principal now ${money(loan.principalRemaining)}`;
-      } catch {
-        el.querySelector('.loan-estimate').textContent = 'Enter a positive initial amount and total tenure; remaining months must not exceed total tenure.';
+        el.querySelector('.loan-estimate').textContent = `Calculated EMI ${money(loan.emiAmount)} · Principal now ${money(loan.principalRemaining)} · ${plural(loan.monthsRemaining,'month')} remaining`;
+      } catch(error) {
+        el.querySelector('.loan-estimate').textContent = error.message;
       }
     }
     function appendEditRow(section, row = {}, focus = false) {
@@ -172,7 +186,7 @@
       container.querySelector('.editor-empty')?.remove();
       const el = document.createElement('div');
       el.className = 'edit-row' + (section === 'debts' ? '' : ' simple');
-      el.innerHTML = editorFields[section].map(([key,label,type]) => `<label class="editor-field">${label}${type === 'amount' ? ' (' + escapeHTML(data.currency) + ')' : ''}<input data-field="${key}" ${type === 'text' ? 'type="text" maxlength="200"' : `type="number" min="0" max="${type === 'integer' ? 1200 : type === 'rate' ? 100 : 1e12}" step="${type === 'integer' ? 1 : 'any'}"`} required value="${escapeHTML(row[key] ?? (type === 'text' ? '' : 0))}"></label>`).join('');
+      el.innerHTML = editorFields[section].map(([key,label,type]) => `<label class="editor-field">${label}${type === 'amount' ? ' (' + escapeHTML(data.currency) + ')' : ''}<input data-field="${key}" ${type === 'text' ? 'type="text" maxlength="200"' : type === 'month' ? `type="month" min="1000-01" max="${currentMonth()}"` : `type="number" min="0" max="${type === 'integer' ? 1200 : type === 'rate' ? 100 : 1e12}" step="${type === 'integer' ? 1 : 'any'}"`} required value="${escapeHTML(row[key] ?? (type === 'text' ? '' : type === 'month' ? currentMonth() : 0))}"></label>`).join('');
       const remove = document.createElement('button');
       remove.type = 'button'; remove.className = 'remove-row'; remove.textContent = '×';
       remove.setAttribute('aria-label','Remove ' + (row[editorFields[section][0][0]] || section.slice(0,-1)));
@@ -192,9 +206,6 @@
     }
     function openEditor() {
       if (!data) return;
-      $('edit-month').value = data.month;
-      const today = new Date();
-      $('edit-date').value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
       $('edit-sample').checked = data.isSampleData;
       for (const section of Object.keys(editorFields)) {
         $('edit-' + section).replaceChildren();
@@ -207,7 +218,7 @@
       $('editor').scrollTop = 0;
     }
     function readEditor() {
-      const draft = {...data,month:$('edit-month').value,updatedAt:$('edit-date').value,isSampleData:$('edit-sample').checked};
+      const draft = {...data,isSampleData:$('edit-sample').checked};
       for (const section of Object.keys(editorFields)) {
         draft[section] = [...$('edit-' + section).querySelectorAll('.edit-row')].map(editorRowValues);
       }
@@ -244,18 +255,17 @@
       }
     });
 
-    function validate(input) {
+    function validate(input, asOfMonth = currentMonth()) {
       if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('The JSON must contain a dashboard object.');
-      if (typeof input.month !== 'string' || !/^[1-9]\d{3}-(0[1-9]|1[0-2])$/.test(input.month)) throw new Error('month must use YYYY-MM, for example 2026-10.');
-      if (typeof input.updatedAt !== 'string' || !/^[1-9]\d{3}-\d{2}-\d{2}$/.test(input.updatedAt) || !Number.isFinite(Date.parse(input.updatedAt + 'T00:00:00Z')) || new Date(input.updatedAt + 'T00:00:00Z').toISOString().slice(0,10) !== input.updatedAt) throw new Error('updatedAt must be a real date in YYYY-MM-DD format.');
+      if (!validMonth(asOfMonth)) throw new Error('Invalid current month.');
       if (typeof input.isSampleData !== 'boolean') throw new Error('Set isSampleData to true for examples or false for your real numbers.');
       const currency = input.currency ?? 'INR';
       const locale = input.locale ?? 'en-IN';
       if (typeof currency !== 'string' || !/^[A-Z]{3}$/.test(currency)) throw new Error('currency must be a three-letter currency code, for example INR.');
       if (typeof locale !== 'string') throw new Error('locale must be a language tag, for example en-IN.');
       try { new Intl.NumberFormat(locale, {style:'currency',currency}); } catch { throw new Error('Check currency and locale. Use INR and en-IN for Indian rupees.'); }
-      const rules = { debts: ['lender','originalAmount','annualInterestRate','totalTenureMonths','monthsRemaining'], investments: ['name','currentCapital'], plans: ['name','amountNeeded'] };
-      const result = {month:input.month,updatedAt:input.updatedAt,currency,locale,isSampleData:input.isSampleData};
+      const rules = { debts: ['lender','originalAmount','annualInterestRate','totalTenureMonths','startMonth'], investments: ['name','currentCapital'], plans: ['name','amountNeeded'] };
+      const result = {month:asOfMonth,currency,locale,isSampleData:input.isSampleData};
       for (const [section, fields] of Object.entries(rules)) {
         if (!Array.isArray(input[section])) throw new Error(`${section} must be an array. Use [] if it has no entries.`);
         if (input[section].length > 1000) throw new Error(`${section} has too many entries (maximum 1,000).`);
@@ -268,16 +278,20 @@
             if (field === fields[0]) {
               if (typeof value !== 'string' || !value.trim() || value.length > 200) throw new Error(`${label}: ${field} must be a name between 1 and 200 characters.`);
               clean[field] = value.trim();
+            } else if (field === 'startMonth') {
+              if (!validMonth(value)) throw new Error(`${label}: startMonth must use YYYY-MM (the first EMI month).`);
+              if (monthNumber(value) > monthNumber(asOfMonth)) throw new Error(`${label}: the first EMI month cannot be in the future for an existing loan.`);
+              clean[field] = value;
             } else {
               if (typeof value !== 'number' || !Number.isFinite(value) || value < 0 || value > 1e12) throw new Error(`${label}: ${field} must be a nonnegative number, without quotes or commas (maximum 1 trillion).`);
-              if (['monthsRemaining','totalTenureMonths'].includes(field) && (!Number.isInteger(value) || value > 1200)) throw new Error(`${label}: ${field} must be a whole number between 0 and 1,200.`);
+              if (field === 'totalTenureMonths' && (!Number.isInteger(value) || value > 1200)) throw new Error(`${label}: ${field} must be a whole number between 0 and 1,200.`);
               clean[field] = value;
             }
           }
           if (section === 'debts') {
             if (clean.originalAmount <= 0 || clean.totalTenureMonths < 1) throw new Error(`${label}: initial amount and total tenure must be positive.`);
             if (clean.annualInterestRate > 100) throw new Error(`${label}: annual interest rate must be between 0 and 100%.`);
-            if (clean.monthsRemaining > clean.totalTenureMonths) throw new Error(`${label}: remaining months cannot exceed total tenure.`);
+            clean.monthsRemaining = Math.max(0, clean.totalTenureMonths - (monthNumber(asOfMonth) - monthNumber(clean.startMonth)));
             for (const field of ['reportedEmiAmount','reportedPrincipalRemaining']) {
               if (row[field] === undefined) continue;
               if (typeof row[field] !== 'number' || !Number.isFinite(row[field]) || row[field] < 0 || row[field] > 1e12) throw new Error(`${label}: ${field} must be a nonnegative number.`);
@@ -315,7 +329,6 @@
       debtPreviewMonths.set(debt,month);
       const slider=card.querySelector('.debt-month-slider');
       slider.value=String(month);
-      slider.setAttribute('aria-valuetext',`${repaymentMonth(month)}: ${money(amount)} remaining, including interest, after ${plural(month,'payment month')}`);
       const principal = principalAt(debt,month);
       card.querySelector('[data-preview-principal]').textContent=money(principal);
       card.querySelector('[data-preview-interest]').textContent=money(Math.max(amount-principal,0));
@@ -323,7 +336,7 @@
       card.querySelector('[data-preview-amount]').textContent=money(amount);
       slider.setAttribute('aria-valuetext',`${repaymentMonth(month)}: principal ${money(principal)}, future interest ${money(Math.max(amount-principal,0))}, total ${money(amount)}`);
       card.querySelector('[data-preview-date]').textContent=repaymentMonth(month,true);
-      card.querySelector('[data-preview-step]').textContent=duration===0?'Loan cleared':month===0?'Current snapshot':`After ${month} of ${plural(duration,'payment month')}`;
+      card.querySelector('[data-preview-step]').textContent=duration===0?'Loan cleared':month===0?'Current month':`${plural(duration-month,'payment')} remaining`;
       card.querySelector('.debt-preview-reset').disabled=month===0;
     }
     function renderDebts() {
@@ -342,9 +355,10 @@
           <div class="interest-detail">Future interest <strong data-preview-interest></strong></div>
           <div class="debt-preview"><div class="debt-preview-heading"><label for="${sliderId}">Preview month</label><output for="${sliderId}" data-preview-date></output></div><input id="${sliderId}" class="debt-month-slider" type="range" min="0" max="${duration||1}" step="1" value="0" ${duration===0?'disabled':''} aria-label="Preview principal and remaining payments for ${escapeHTML(d.lender)}"><div class="debt-preview-foot"><span data-preview-step></span><button type="button" class="debt-preview-reset" aria-label="Reset ${escapeHTML(d.lender)} payment preview" disabled>Reset</button></div></div>
           <div class="debt-metrics"><div><span>Calculated monthly EMI</span><strong>${escapeHTML(money(d.principalRemaining>0?d.emiAmount:0))}</strong></div><div><span>Months remaining</span><strong><span data-preview-months>${duration}</span><small> mo</small></strong></div></div>
+          <div class="loan-start">First EMI <strong>${escapeHTML(formatMonth(d.startMonth,true))}</strong></div>
           <div class="loan-terms"><div><span>Initial amount</span><strong>${escapeHTML(money(d.originalAmount))}</strong></div><div><span>Annual rate</span><strong>${d.annualInterestRate}%</strong></div><div><span>Total tenure</span><strong>${d.totalTenureMonths} mo</strong></div></div>
           ${d.reportedEmiAmount !== undefined || d.reportedPrincipalRemaining !== undefined ? `<details class="reported-values"><summary>Previously entered figures</summary><p>EMI: ${d.reportedEmiAmount===undefined?'—':escapeHTML(money(d.reportedEmiAmount))}<br>Principal: ${d.reportedPrincipalRemaining===undefined?'—':escapeHTML(money(d.reportedPrincipalRemaining))}<br>Saved reference only; not used in calculations.</p></details>` : ''}
-          <div class="entry-bottom"><span>${percentLabel(d.principalRemaining,total)} of snapshot debt</span></div>${barMarkup(d.principalRemaining,total)}</article>`;
+          <div class="entry-bottom"><span>${percentLabel(d.principalRemaining,total)} of current debt</span></div>${barMarkup(d.principalRemaining,total)}</article>`;
       }).join('') : '<div class="empty">No outstanding loans listed. You’re in control.</div>';
       [...$('debt-rows').querySelectorAll('.entry-card')].forEach((card,i)=>{
         const debt=rows[i],slider=card.querySelector('.debt-month-slider');
@@ -404,8 +418,8 @@
       const month=Number($('runway-slider').value);
       const state=runwayState(month);
       $('runway-amount').textContent=money(state.amount);
-      $('runway-month').textContent=month===0?'per month · now':`per month · after ${plural(month,'month')}`;
-      $('runway-slider').setAttribute('aria-valuetext',`After ${plural(month,'month')}: ${money(state.amount)} per month`);
+      $('runway-month').textContent=`per month · ${repaymentMonth(month)}`;
+      $('runway-slider').setAttribute('aria-valuetext',`${repaymentMonth(month)}: ${money(state.amount)} per month`);
       const marker=$('runway-marker');
       if(marker){marker.setAttribute('cx',String(16+month/Math.max(state.maxMonth,1)*368));marker.setAttribute('cy',String(112-state.amount/Math.max(state.total,1)*92));}
     }
@@ -418,7 +432,7 @@
       if(!events.length)path+=' H384';
       const area=path+' V112 H16 Z';
       const ticks=[...new Set([0,Math.round(state.maxMonth/2),state.maxMonth])];
-      $('runway-chart').innerHTML=`<svg viewBox="0 0 400 142" role="img" aria-label="Scheduled monthly EMI begins at ${escapeHTML(money(state.total))}${state.maxMonth ? ' and reaches zero after '+state.maxMonth+' months' : '; no active loans'}."><defs><linearGradient id="runway-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f3ae73" stop-opacity=".20"/><stop offset="100%" stop-color="#f3ae73" stop-opacity=".01"/></linearGradient></defs><path d="M16 20H384M16 66H384M16 112H384" class="chart-grid"/><path d="${area}" fill="url(#runway-gradient)" stroke="none"/><path d="${path}" class="runway-line" pathLength="1"/><circle id="runway-marker" cx="16" cy="${y(state.total)}" r="4"/>${ticks.map((m,i)=>`<text x="${x(m)}" y="133" text-anchor="${i===0?'start':i===ticks.length-1?'end':'middle'}">${m===0?'Now':m+' mo'}</text>`).join('')}</svg>`;
+      $('runway-chart').innerHTML=`<svg viewBox="0 0 400 142" role="img" aria-label="Scheduled monthly EMI begins at ${escapeHTML(money(state.total))}${state.maxMonth ? ' and reaches zero in '+repaymentMonth(state.maxMonth) : '; no active loans'}."><defs><linearGradient id="runway-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f3ae73" stop-opacity=".20"/><stop offset="100%" stop-color="#f3ae73" stop-opacity=".01"/></linearGradient></defs><path d="M16 20H384M16 66H384M16 112H384" class="chart-grid"/><path d="${area}" fill="url(#runway-gradient)" stroke="none"/><path d="${path}" class="runway-line" pathLength="1"/><circle id="runway-marker" cx="16" cy="${y(state.total)}" r="4"/>${ticks.map((m,i)=>`<text x="${x(m)}" y="133" text-anchor="${i===0?'start':i===ticks.length-1?'end':'middle'}">${escapeHTML(repaymentMonth(m,true))}</text>`).join('')}</svg>`;
       $('runway-slider').max=state.maxMonth||1;$('runway-slider').value=0;$('runway-slider').disabled=state.maxMonth===0;
       updateRunway();
     }
@@ -434,19 +448,19 @@
     function repaymentMonth(offset, short=false) {
       const [year,month]=data.month.split('-').map(Number);
       const date=new Date(Date.UTC(year,month-1+offset,1));
-      return date.toLocaleDateString(data.locale,{month:short?'short':'long',year:short?'2-digit':'numeric',timeZone:'UTC'});
+      return date.toLocaleDateString(data.locale,{month:short?'short':'long',year:'numeric',timeZone:'UTC'});
     }
     function selectRepaymentMonth(index) {
       if(!repaymentSeries.length)return;
       const month=Math.max(0,Math.min(repaymentSeries.length-1,Math.round(index)));
       const amount=repaymentSeries[month];
       $('repayment-slider').value=String(month);
-      $('repayment-selected-month').textContent=repaymentMonth(month)+(month===0?' · current snapshot':` · after ${plural(month,'payment month')}`);
+      $('repayment-selected-month').textContent=repaymentMonth(month)+(month===0?' · current month':'');
       $('repayment-amount').textContent=money(amount);
       $('repayment-principal').textContent=money(principalSeries[month]);
       $('repayment-interest').textContent=money(Math.max(amount-principalSeries[month],0));
-      $('repayment-position').textContent=`${month} / ${repaymentSeries.length-1} mo`;
-      $('repayment-slider').setAttribute('aria-valuetext',`${repaymentMonth(month)}: ${money(amount)} including interest; principal ${money(principalSeries[month])}; after ${plural(month,'payment month')}`);
+      $('repayment-position').textContent=repaymentMonth(month,true);
+      $('repayment-slider').setAttribute('aria-valuetext',`${repaymentMonth(month)}: ${money(amount)} including interest; principal ${money(principalSeries[month])}`);
       if(repaymentLayout && $('repayment-marker')){
         const {left,right,top,bottom,width,max,denominator}=repaymentLayout;
         const x=left+month/max*(width-left-right),y=bottom-amount/denominator*(bottom-top);
@@ -480,8 +494,8 @@
       const last=repaymentSeries.length-1;
       $('repayment-slider').max=String(last||1);$('repayment-slider').value='0';$('repayment-slider').disabled=last===0;
       $('repayment-end-month').textContent=last?repaymentMonth(last):'No remaining schedule';
-      $('repayment-duration').textContent=last?`${plural(last,'month')} from this snapshot`:'';
-      $('repayment-note').textContent=last?`Starts at the ${repaymentMonth(0)} snapshot. Each following month assumes one EMI paid per active loan. Principal follows monthly reducing-balance interest; the gap between lines is future interest. Fixed-rate estimates exclude fees, missed payments and prepayments. Hover, tap, or use the slider.`:'No remaining loan payments recorded. Add an active debt to see its monthly schedule.';
+      $('repayment-duration').textContent=last?`From ${repaymentMonth(0,true)}`:'';
+      $('repayment-note').textContent=last?`Starts in ${repaymentMonth(0)}, before that month’s EMI. Each following month assumes one EMI paid per active loan. Principal follows monthly reducing-balance interest; the gap between lines is future interest. Fixed-rate estimates exclude fees, missed payments and prepayments. Hover, tap, or use the slider.`:'No remaining loan payments recorded. Add an active debt to see its monthly schedule.';
       drawRepaymentChart();
     }
     $('repayment-slider').addEventListener('input',()=>selectRepaymentMonth(Number($('repayment-slider').value)));
@@ -509,7 +523,7 @@
       const debts=sum(data.debts,'principalRemaining'),capital=sum(data.investments,'currentCapital'),targets=sum(data.plans,'amountNeeded');
       const active=data.debts.filter(d=>d.principalRemaining>0);
       $('month').textContent=date.toLocaleDateString(data.locale,{month:'long',year:'numeric',timeZone:'UTC'});
-      $('updated').textContent='Updated '+new Date(data.updatedAt+'T00:00:00Z').toLocaleDateString(data.locale,{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
+      $('updated').textContent='Loan schedules calculated for this month';
       $('total-debt').textContent=money(debts);$('total-debt-payments').textContent=money(data.debts.reduce((total,debt)=>total+remainingPayments(debt),0));$('total-investment').textContent=money(capital);$('total-emi').textContent=money(sum(active,'emiAmount'));$('total-plans').textContent=money(targets);
       $('debt-detail').textContent=plural(active.length,'active loan')+' · calculated estimate';$('investment-detail').textContent=plural(data.investments.length,'holding');$('plan-detail').textContent=plural(data.plans.length,'plan');
       for(const [id,section] of [['debt','debts'],['plan','plans']])$(id+'-pill').textContent=data[section].length;
