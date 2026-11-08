@@ -1,68 +1,58 @@
 {
-  "month": "2026-10",
-  "updatedAt": "2026-10-25",
   "currency": "INR",
   "locale": "en-IN",
   "isSampleData": false,
   "debts": [
     {
       "lender": "HDFC",
-      "monthsRemaining": 27,
       "originalAmount": 1935000,
       "annualInterestRate": 11.25,
-      "totalTenureMonths": 36
+      "totalTenureMonths": 36,
+      "startMonth": "2026-01"
     },
     {
       "lender": "Axis",
-      "monthsRemaining": 53,
       "originalAmount": 711000,
       "annualInterestRate": 13.95,
-      "totalTenureMonths": 60
+      "totalTenureMonths": 60,
+      "startMonth": "2026-03"
     },
     {
       "lender": "KreditBee",
-      "monthsRemaining": 34,
       "originalAmount": 454000,
       "annualInterestRate": 21.11,
-      "totalTenureMonths": 36
+      "totalTenureMonths": 36,
+      "startMonth": "2026-08"
     },
     {
       "lender": "Poonam",
-      "monthsRemaining": 34,
       "originalAmount": 435000,
       "annualInterestRate": 23.5,
-      "totalTenureMonths": 36
+      "totalTenureMonths": 36,
+      "startMonth": "2026-08"
     },
     {
       "lender": "Fibe",
-      "monthsRemaining": 22,
       "originalAmount": 300000,
       "annualInterestRate": 20,
-      "totalTenureMonths": 24
+      "totalTenureMonths": 24,
+      "startMonth": "2026-08"
     },
     {
       "lender": "Groww",
-      "monthsRemaining": 22,
       "originalAmount": 300000,
       "annualInterestRate": 19.99,
-      "totalTenureMonths": 30
+      "totalTenureMonths": 30,
+      "startMonth": "2026-02"
     }
   ],
   "investments": [
     {
       "name": "Trading",
-      "currentCapital": 300000
-    },
-    {
-      "name": "Savings",
-      "currentCapital": 50000
+      "currentCapital": 100000
     }
   ],
   "plans": [
-    {
-      "name": "Home Deposit",
-      "amountNeeded": 150000
-    },
     {
       "name": "Home Things",
       "amountNeeded": 300000
